@@ -7,14 +7,22 @@
 //
 
 import UIKit
+import SPMenu
 
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
     }
 
+    @IBAction func ok(_ sender: UIButton) {
+        let origin = sender.frame.origin
+        let x = origin.x
+        let y = origin.y + sender.frame.size.height
+        let a = SPMenu(frame: self.view.frame, offSet: CGPoint(x: x, y: y))
+        self.view.addSubview(a)
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
