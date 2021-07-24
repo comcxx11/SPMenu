@@ -32,7 +32,7 @@ open class SPMenu<T>: UIView, UITableViewDataSource, UITableViewDelegate {
     
     private func drawBackground() {
         dim.frame = self.frame
-        dim.backgroundColor = .blue
+        dim.backgroundColor = .clear
         dim.alpha = 0.2
         
         let ges = UITapGestureRecognizer(target: self, action: #selector(tapHandler))
@@ -44,6 +44,11 @@ open class SPMenu<T>: UIView, UITableViewDataSource, UITableViewDelegate {
     public func reloadData(data: [SPMenuData<T>]) {
         self.items = data
         self.menu?.reloadData()
+        
+        if let cnt = items?.count {
+            menu?.frame = CGRect(x: offset?.x ?? 0, y: offset?.y ?? 0, width: 200, height: CGFloat(44 * cnt))
+        }
+        
     }
     
     private func drawMenu() {
@@ -54,6 +59,8 @@ open class SPMenu<T>: UIView, UITableViewDataSource, UITableViewDelegate {
         
         menu?.delegate = self
         menu?.dataSource = self
+        
+        menu?.alwaysBounceVertical = false
     }
     
     private func setup() {
@@ -75,6 +82,7 @@ open class SPMenu<T>: UIView, UITableViewDataSource, UITableViewDelegate {
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
+        cell.contentView.backgroundColor = .gray
         cell.textLabel?.text = self.items?[indexPath.row].title
         return cell
     }

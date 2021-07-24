@@ -32,6 +32,8 @@ class ViewController: UIViewController {
 
     var data = ["a", "b"]
     
+    var a:SPMenu<inboundChannels>?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -49,13 +51,18 @@ class ViewController: UIViewController {
             d.append(SPMenuData(title: i.text, data: i))
         }
         
-        let a = SPMenu<inboundChannels>(frame: self.view.frame, offSet: CGPoint(x: x, y: y))
-        a.reloadData(data: d)
-        a.selectItem = { item in
+        if a == nil {
+            a = SPMenu<inboundChannels>(frame: self.view.frame, offSet: CGPoint(x: x, y: y))
+        }
+        
+        a?.reloadData(data: d)
+        a?.selectItem = { item in
             print(item?.downloadUrl ?? "")
         }
         
-        self.view.addSubview(a)
+        if let menu = a {
+            self.view.addSubview(menu)
+        }
     }
     
     override func didReceiveMemoryWarning() {
