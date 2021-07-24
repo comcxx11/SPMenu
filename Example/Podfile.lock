@@ -1,0 +1,16 @@
+PODS:
+  - SPMenu (0.1.0)
+
+DEPENDENCIES:
+  - SPMenu (from `../`)
+
+EXTERNAL SOURCES:
+  SPMenu:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  SPMenu: 8a8061cdedb17b3f4941450c532f7e7475dae5da
+
+PODFILE CHECKSUM: 5f7ca598f2a8621192490c18c0d0baff358f0c60
+
+COCOAPODS: 1.10.1

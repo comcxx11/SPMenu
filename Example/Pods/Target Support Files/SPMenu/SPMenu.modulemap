@@ -1,0 +1,6 @@
+framework module SPMenu {
+  umbrella header "SPMenu-umbrella.h"
+
+  export *
+  module * { export * }
+}
