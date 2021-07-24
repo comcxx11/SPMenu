@@ -1,11 +1,26 @@
 import UIKit
 
-open class SPMenu: UIView {
-    var dim = UIView(frame: CGRect.zero)
-    var menu: UITableView?
-    var offset: CGPoint?
+
+public struct SPMenuData<T> {
+    public init(title: String?, data: T) {
+        self.title = title
+        self.data = data
+    }
+    public var title: String?
+    public var data: T
+}
+
+
+open class SPMenu<T>: UIView, UITableViewDataSource, UITableViewDelegate {
     
-    public convenience init(frame: CGRect, offSet: CGPoint) {
+    var dim = UIView(frame: CGRect.zero)
+    open var menu: UITableView?
+    var offset: CGPoint?
+    var items:[SPMenuData<T>]?
+    
+    open var selectItem:((T?)->Void)?
+    
+    public convenience init(frame: CGRect, offSet: CGPoint? = nil) {
         self.init(frame: frame)
         self.offset = offSet
         setup()
@@ -15,7 +30,7 @@ open class SPMenu: UIView {
         super.init(frame: frame)
     }
     
-    private func setup() {
+    private func drawBackground() {
         dim.frame = self.frame
         dim.backgroundColor = .blue
         dim.alpha = 0.2
@@ -24,11 +39,26 @@ open class SPMenu: UIView {
         dim.addGestureRecognizer(ges)
         
         self.addSubview(dim)
-        
-        menu = UITableView(frame: CGRect(x: offset?.x ?? 0, y: offset?.y ?? 0, width: 100, height: 100))
+    }
+    
+    public func reloadData(data: [SPMenuData<T>]) {
+        self.items = data
+        self.menu?.reloadData()
+    }
+    
+    private func drawMenu() {
+        menu = UITableView(frame: CGRect(x: offset?.x ?? 0, y: offset?.y ?? 0, width: 200, height: 200))
         if let m = menu {
             self.addSubview(m)
         }
+        
+        menu?.delegate = self
+        menu?.dataSource = self
+    }
+    
+    private func setup() {
+        drawBackground()
+        drawMenu()
     }
     
     @objc private func tapHandler() {
@@ -38,4 +68,22 @@ open class SPMenu: UIView {
     public required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
+    
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return items?.count ?? 0
+    }
+    
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell()
+        cell.textLabel?.text = self.items?[indexPath.row].title
+        return cell
+    }
+    
+    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.menu?.deselectRow(at: indexPath, animated: true)
+        self.selectItem?(self.items?[indexPath.row].data)
+        self.removeFromSuperview()
+    }
+    
 }
+
