@@ -1,8 +1,9 @@
 {
   "name": "SPMenu",
-  "version": "0.1.0",
+  "version": "2.0.0",
   "summary": "A short description of SPMenu.",
-  "description": "TODO: Add long description of the pod here.",
+  "description": "SPMenu is a TableView Menu",
+  "swift_versions": "5.0",
   "homepage": "https://github.com/comcxx11/SPMenu",
   "license": {
     "type": "MIT",
@@ -13,10 +14,11 @@
   },
   "source": {
     "git": "https://github.com/comcxx11/SPMenu.git",
-    "tag": "0.1.0"
+    "tag": "2.0.0"
   },
   "platforms": {
     "ios": "9.0"
   },
-  "source_files": "SPMenu/Classes/**/*"
+  "source_files": "SPMenu/Classes/**/*",
+  "swift_version": "5.0"
 }

@@ -1,5 +1,8 @@
 import UIKit
 
+public struct SPMenuConfig {
+    var bgColor: UIColor
+}
 
 public struct SPMenuData<T> {
     public init(title: String?, data: T) {
@@ -20,9 +23,16 @@ open class SPMenu<T>: UIView, UITableViewDataSource, UITableViewDelegate {
     
     open var selectItem:((T?)->Void)?
     
-    public convenience init(frame: CGRect, offSet: CGPoint? = nil) {
+    open var updateHeight:((CGFloat)->())?
+    
+    open var height:CGFloat = 0
+    
+    open var config: SPMenuConfig?
+    
+    public convenience init(frame: CGRect, config: SPMenuConfig? = nil, offSet: CGPoint? = nil) {
         self.init(frame: frame)
         self.offset = offSet
+        self.config = config
         setup()
     }
     
@@ -46,9 +56,10 @@ open class SPMenu<T>: UIView, UITableViewDataSource, UITableViewDelegate {
         self.menu?.reloadData()
         
         if let cnt = items?.count {
-            menu?.frame = CGRect(x: offset?.x ?? 0, y: offset?.y ?? 0, width: 200, height: CGFloat(44 * cnt))
+            height = CGFloat(44 * cnt)
+            menu?.frame = CGRect(x: offset?.x ?? 0, y: offset?.y ?? 0, width: 200, height: height)
+            updateHeight?(height)
         }
-        
     }
     
     private func drawMenu() {
@@ -82,7 +93,7 @@ open class SPMenu<T>: UIView, UITableViewDataSource, UITableViewDelegate {
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
-        cell.contentView.backgroundColor = .gray
+        cell.contentView.backgroundColor = config?.bgColor
         cell.textLabel?.text = self.items?[indexPath.row].title
         return cell
     }

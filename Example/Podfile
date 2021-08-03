@@ -5,6 +5,8 @@ platform :ios, '9.0'
 target 'SPMenu_Example' do
   pod 'SPMenu', :path => '../'
 
+  pod "SnapKit"
+  
   target 'SPMenu_Tests' do
     inherit! :search_paths
 

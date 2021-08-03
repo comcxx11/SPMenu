@@ -8,6 +8,7 @@
 
 import UIKit
 import SPMenu
+import SnapKit
 
 struct cashList: Codable {
     var sortNo: String?
@@ -26,7 +27,20 @@ struct inboundChannels: Codable {
     var url: String?
 }
 
-
+extension UIWindow {
+    static var key: UIWindow? {
+        if #available(iOS 13, *) {
+            let win = UIApplication.shared.windows.first { $0.isKeyWindow }
+            if win == nil {
+                return UIApplication.shared.windows.first
+            } else {
+                return win
+            }
+        } else {
+            return UIApplication.shared.keyWindow
+        }
+    }
+}
 
 class ViewController: UIViewController {
 
@@ -43,8 +57,19 @@ class ViewController: UIViewController {
         let x = origin.x
         let y = origin.y + sender.frame.size.height
         
-        let d1 = [inboundChannels(sortNo: 1, downloadUrl: "10,000", text: "bb", type: 1, url: ""),
-                  inboundChannels(sortNo: 2, downloadUrl: "20,000", text: "yy", type: 1, url: "")]
+        let d1 = [inboundChannels(sortNo: 1, downloadUrl: "10,000", text: "10,000", type: 1, url: ""),
+                  inboundChannels(sortNo: 2, downloadUrl: "20,000", text: "20,000", type: 1, url: ""),
+                  inboundChannels(sortNo: 3, downloadUrl: "20,000", text: "30,000", type: 1, url: ""),
+                  inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
+                  inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
+                  inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
+                  inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
+                  inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
+                  inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
+                  inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
+                  inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
+                  inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
+        ]
         
         var d: [SPMenuData<inboundChannels>] = []
         for i in d1 {
@@ -62,6 +87,23 @@ class ViewController: UIViewController {
         
         if let menu = a {
             self.view.addSubview(menu)
+            let globalPoint = sender.superview?.convert(sender.frame.origin, to: nil)
+            let p = UIScreen.main.bounds.size.height - CGFloat(globalPoint?.y ?? 0) - sender.frame.size.height - 10
+            if  p > menu.height {
+                menu.menu?.snp.makeConstraints{
+                    $0.leading.equalTo(sender.snp_leading)
+                    $0.top.equalTo(sender.snp_bottom)
+                    $0.width.equalTo(200)
+                    $0.height.equalTo(menu.height)
+                }
+            } else {
+                menu.menu?.snp.makeConstraints{
+                    $0.leading.equalTo(sender.snp_leading)
+                    $0.bottom.equalTo(sender.snp_top)
+                    $0.width.equalTo(200)
+                    $0.height.equalTo(menu.height)
+                }
+            }
         }
     }
     
