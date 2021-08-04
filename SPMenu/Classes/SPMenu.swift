@@ -1,7 +1,13 @@
 import UIKit
 
 public struct SPMenuConfig {
-    var bgColor: UIColor
+    public var bgColor: UIColor = .white
+    public var maxWidth: CGFloat = 250
+    public var rowHeight = 30
+    
+    public init() {
+        
+    }
 }
 
 public struct SPMenuData<T> {
@@ -17,7 +23,7 @@ public struct SPMenuData<T> {
 open class SPMenu<T>: UIView, UITableViewDataSource, UITableViewDelegate {
     
     var dim = UIView(frame: CGRect.zero)
-    open var menu: UITableView?
+    open var selector: UITableView?
     var offset: CGPoint?
     var items:[SPMenuData<T>]?
     
@@ -29,9 +35,13 @@ open class SPMenu<T>: UIView, UITableViewDataSource, UITableViewDelegate {
     
     open var config: SPMenuConfig?
     
-    public convenience init(frame: CGRect, config: SPMenuConfig? = nil, offSet: CGPoint? = nil) {
-        self.init(frame: frame)
-        self.offset = offSet
+    public convenience init(target: UIView, config: SPMenuConfig? = nil) {
+        let origin = target.frame.origin
+        let x = origin.x
+        let y = origin.y + target.frame.size.height
+        
+        self.init(frame: target.frame)
+        self.offset = CGPoint(x: x, y: y)
         self.config = config
         setup()
     }
@@ -53,34 +63,37 @@ open class SPMenu<T>: UIView, UITableViewDataSource, UITableViewDelegate {
     
     public func reloadData(data: [SPMenuData<T>]) {
         self.items = data
-        self.menu?.reloadData()
+        self.selector?.reloadData()
         
         if let cnt = items?.count {
             height = CGFloat(44 * cnt)
-            menu?.frame = CGRect(x: offset?.x ?? 0, y: offset?.y ?? 0, width: 200, height: height)
+            selector?.frame = CGRect(x: offset?.x ?? 0, y: offset?.y ?? 0, width: 200, height: height)
             updateHeight?(height)
         }
     }
     
     private func drawMenu() {
-        menu = UITableView(frame: CGRect(x: offset?.x ?? 0, y: offset?.y ?? 0, width: 200, height: 200))
-        if let m = menu {
+        selector = UITableView(frame: CGRect(x: offset?.x ?? 0, y: offset?.y ?? 0, width: 200, height: 200))
+        if let m = selector {
             self.addSubview(m)
         }
         
-        menu?.delegate = self
-        menu?.dataSource = self
+        selector?.delegate = self
+        selector?.dataSource = self
         
-        menu?.alwaysBounceVertical = false
+        selector?.alwaysBounceVertical = false
     }
     
     private func setup() {
+        config = SPMenuConfig()
         drawBackground()
         drawMenu()
     }
     
     @objc private func tapHandler() {
+        self.selector?.clearConstraints()
         self.removeFromSuperview()
+        
     }
     
     public required init?(coder: NSCoder) {
@@ -99,10 +112,22 @@ open class SPMenu<T>: UIView, UITableViewDataSource, UITableViewDelegate {
     }
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.menu?.deselectRow(at: indexPath, animated: true)
+        self.selector?.deselectRow(at: indexPath, animated: true)
         self.selectItem?(self.items?[indexPath.row].data)
+        self.selector?.clearConstraints()
         self.removeFromSuperview()
     }
     
+    public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return CGFloat(config?.rowHeight ?? 44)
+    }
 }
 
+extension UIView {
+    func clearConstraints() {
+        for subview in self.subviews {
+            subview.clearConstraints()
+        }
+        self.removeConstraints(self.constraints)
+    }
+}

@@ -44,73 +44,99 @@ extension UIWindow {
 
 class ViewController: UIViewController {
 
-    var data = ["a", "b"]
-    
-    var a:SPMenu<inboundChannels>?
-    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
 
     @IBAction func ok(_ sender: UIButton) {
-        let origin = sender.frame.origin
-        let x = origin.x
-        let y = origin.y + sender.frame.size.height
+        let dummyData = getDummy()
         
-        let d1 = [inboundChannels(sortNo: 1, downloadUrl: "10,000", text: "10,000", type: 1, url: ""),
-                  inboundChannels(sortNo: 2, downloadUrl: "20,000", text: "20,000", type: 1, url: ""),
-                  inboundChannels(sortNo: 3, downloadUrl: "20,000", text: "30,000", type: 1, url: ""),
-                  inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
-                  inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
-                  inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
-                  inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
-                  inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
-                  inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
-                  inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
-                  inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
-                  inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
-        ]
+        let data = MenuDataConverter.inboundChannels(value: dummyData)
+        let connector = MenuManager<inboundChannels>.Connector(target: self.view, sender: sender)
+        let menuManager = MenuManager<inboundChannels>(connector: connector, data: data)
         
-        var d: [SPMenuData<inboundChannels>] = []
-        for i in d1 {
-            d.append(SPMenuData(title: i.text, data: i))
-        }
-        
-        if a == nil {
-            a = SPMenu<inboundChannels>(frame: self.view.frame, offSet: CGPoint(x: x, y: y))
-        }
-        
-        a?.reloadData(data: d)
-        a?.selectItem = { item in
-            print(item?.downloadUrl ?? "")
-        }
-        
-        if let menu = a {
-            self.view.addSubview(menu)
-            let globalPoint = sender.superview?.convert(sender.frame.origin, to: nil)
-            let p = UIScreen.main.bounds.size.height - CGFloat(globalPoint?.y ?? 0) - sender.frame.size.height - 10
-            if  p > menu.height {
-                menu.menu?.snp.makeConstraints{
-                    $0.leading.equalTo(sender.snp_leading)
-                    $0.top.equalTo(sender.snp_bottom)
-                    $0.width.equalTo(200)
-                    $0.height.equalTo(menu.height)
-                }
-            } else {
-                menu.menu?.snp.makeConstraints{
-                    $0.leading.equalTo(sender.snp_leading)
-                    $0.bottom.equalTo(sender.snp_top)
-                    $0.width.equalTo(200)
-                    $0.height.equalTo(menu.height)
-                }
-            }
+        menuManager.menu.selectItem = {
+            print($0?.downloadUrl ?? "")
         }
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    private func getDummy() -> [inboundChannels] {
+        return [inboundChannels(sortNo: 1, downloadUrl: "10,000", text: "10,000", type: 1, url: ""),
+                inboundChannels(sortNo: 2, downloadUrl: "20,000", text: "20,000", type: 1, url: ""),
+                inboundChannels(sortNo: 3, downloadUrl: "20,000", text: "30,000", type: 1, url: ""),
+                inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
+                inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
+                inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
+                inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
+                inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
+                inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
+                inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
+                inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
+                inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
+                inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
+                inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
+                inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
+                inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
+                inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
+                inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
+                inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
+                inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
+                inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
+                inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
+                inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
+                inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
+                inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
+                inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
+                inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
+                inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
+      ]
     }
-
 }
 
+class MenuDataConverter {
+    static func inboundChannels(value: [inboundChannels]) -> [SPMenuData<inboundChannels>] {
+        var new: [SPMenuData<inboundChannels>] = []
+        for i in value {
+            new.append(SPMenuData(title: i.text, data: i))
+        }
+        
+        return new
+    }
+}
+
+
+class MenuManager<T> {
+    
+    struct Connector {
+        var target: UIView
+        var sender: UIView
+    }
+    
+    var menu:SPMenu<T>
+    
+    init(connector:Connector, data:[SPMenuData<T>]) {
+        self.menu = SPMenu<T>(target: connector.target)
+        self.menu.reloadData(data: data)
+        updateDisplay(connector: connector)
+    }
+    
+    private func updateDisplay(connector: Connector) {
+        
+        connector.target.addSubview(menu)
+        menu.selector?.snp.makeConstraints{
+            let c = SPMenuFigure(target: connector.sender, menu: menu)
+            let size = c.size
+            $0.width.equalTo(size.width)
+            $0.height.equalTo(size.height)
+            
+            switch c.direction {
+            case .down:
+                $0.top.equalTo(connector.sender.snp_bottom)
+            case .up:
+                $0.bottom.equalTo(connector.sender.snp_top)
+            }
+            
+            $0.leading.equalTo(connector.sender.snp_leading)
+        }
+    }
+}
