@@ -23,13 +23,13 @@ open class SPMenuFigure<T> {
     
     var rowHeight:Int
     
-    public init(target: UIView, menu: SPMenu<T>) {
-        gptc = target.superview?.convert(target.center, to: nil) ?? CGPoint(x: 0, y: 0)
+    init(con: Connector, menu: SPMenu<T>) {
+        gptc = con.sender.superview!.convert(con.sender.center, to: nil)
         winHeight = UIScreen.main.bounds.size.height
         halfWinHeight = winHeight / 2
         maxWidth = CGFloat(menu.config?.maxWidth ?? 0)
         originHeight = menu.height
-        targetWidth = target.frame.width
+        targetWidth = con.sender.frame.width
         rowHeight = menu.config?.rowHeight ?? 0
     }
     
@@ -84,8 +84,18 @@ open class SPMenuFigure<T> {
         if originHeight > marginHeight {
             return marginHeight - defaultPadding
         } else {
-            return originHeight - defaultPadding
+            if gptc.y + originHeight > winHeight {
+                if self.direction == .down {
+                    return originHeight - defaultPadding
+                } else {
+                    return originHeight
+                }
+            } else {
+                return originHeight
+            }
+            
         }
     }
     
 }
+

@@ -19,7 +19,7 @@ struct cashList: Codable {
     var hint: String?
 }
 
-struct inboundChannels: Codable {
+public struct inboundChannels: Codable {
     var sortNo: Int?
     var downloadUrl: String?
     var text: String?
@@ -42,22 +42,35 @@ extension UIWindow {
     }
 }
 
-class ViewController: UIViewController {
+class MenuDataConverter {
+    static func regularAmount(value: [inboundChannels]?) -> [SPMenuData<inboundChannels>] {
+        var new: [SPMenuData<inboundChannels>] = []
+        for i in value ?? [] {
+            new.append(SPMenuData(title: i.downloadUrl, data: i))
+        }
+        
+        return new
+    }
+}
 
+
+class ViewController: UIViewController {
+    
+    
+    var menuManager: MenuManager<inboundChannels> = MenuManager()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        menuManager.updateData(data: MenuDataConverter.regularAmount(value: getDummy()))
+        menuManager.menu?.selectItem = {
+            if let data = $0 {
+                print(data)
+            }
+        }
     }
 
     @IBAction func ok(_ sender: UIButton) {
-        let dummyData = getDummy()
-        
-        let data = MenuDataConverter.inboundChannels(value: dummyData)
-        let connector = MenuManager<inboundChannels>.Connector(target: self.view, sender: sender)
-        let menuManager = MenuManager<inboundChannels>(connector: connector, data: data)
-        
-        menuManager.menu.selectItem = {
-            print($0?.downloadUrl ?? "")
-        }
+        menuManager.show(sender: sender)
     }
     
     private func getDummy() -> [inboundChannels] {
@@ -90,53 +103,5 @@ class ViewController: UIViewController {
                 inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
                 inboundChannels(sortNo: 4, downloadUrl: "20,000", text: "40,000", type: 1, url: ""),
       ]
-    }
-}
-
-class MenuDataConverter {
-    static func inboundChannels(value: [inboundChannels]) -> [SPMenuData<inboundChannels>] {
-        var new: [SPMenuData<inboundChannels>] = []
-        for i in value {
-            new.append(SPMenuData(title: i.text, data: i))
-        }
-        
-        return new
-    }
-}
-
-
-class MenuManager<T> {
-    
-    struct Connector {
-        var target: UIView
-        var sender: UIView
-    }
-    
-    var menu:SPMenu<T>
-    
-    init(connector:Connector, data:[SPMenuData<T>]) {
-        self.menu = SPMenu<T>(target: connector.target)
-        self.menu.reloadData(data: data)
-        updateDisplay(connector: connector)
-    }
-    
-    private func updateDisplay(connector: Connector) {
-        
-        connector.target.addSubview(menu)
-        menu.selector?.snp.makeConstraints{
-            let c = SPMenuFigure(target: connector.sender, menu: menu)
-            let size = c.size
-            $0.width.equalTo(size.width)
-            $0.height.equalTo(size.height)
-            
-            switch c.direction {
-            case .down:
-                $0.top.equalTo(connector.sender.snp_bottom)
-            case .up:
-                $0.bottom.equalTo(connector.sender.snp_top)
-            }
-            
-            $0.leading.equalTo(connector.sender.snp_leading)
-        }
     }
 }

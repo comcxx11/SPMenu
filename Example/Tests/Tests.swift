@@ -1,5 +1,5 @@
 import XCTest
-import SPMenu
+//import SPMenu
 
 class Tests: XCTestCase {
     
