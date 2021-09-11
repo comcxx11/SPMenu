@@ -2,7 +2,7 @@ import UIKit
 import SnapKit
 
 public struct SPMenuConfig {
-    public var bgColor: UIColor = .clear
+    public var bgColor: UIColor = .white
     public var maxWidth: CGFloat = 250
     public var rowHeight = 44
     
@@ -78,7 +78,8 @@ open class SPMenu<T>: UIView, UITableViewDataSource, UITableViewDelegate {
         self.reset()
         
         if let cnt = items?.count {
-            height = CGFloat(44 * cnt)
+            let rowHeight = config?.rowHeight ?? 44
+            height = CGFloat(rowHeight * cnt)
             selector?.frame = CGRect(x: offset?.x ?? 0, y: offset?.y ?? 0, width: 200, height: height)
             updateHeight?(height)
         }
@@ -101,7 +102,7 @@ open class SPMenu<T>: UIView, UITableViewDataSource, UITableViewDelegate {
         
         selector?.register(SPMenuCell.self, forCellReuseIdentifier: "SPMenuCell")
     
-        selector?.backgroundColor = .white
+        selector?.backgroundColor = config?.bgColor
         selector?.delegate = self
         selector?.dataSource = self
         
@@ -111,7 +112,6 @@ open class SPMenu<T>: UIView, UITableViewDataSource, UITableViewDelegate {
     }
     
     private func setup() {
-        config = SPMenuConfig()
         drawBackground()
         drawMenu()
     }
@@ -156,7 +156,8 @@ open class SPMenu<T>: UIView, UITableViewDataSource, UITableViewDelegate {
     }
     
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return CGFloat(44)
+        let rowHeight = config?.rowHeight ?? 44
+        return CGFloat(rowHeight)
     }
     
     public func addBackground() {
@@ -221,7 +222,6 @@ extension UIApplication {
     }
 }
 
-
 open class MenuManager<T> {
     
     open var menu:SPMenu<T>?
@@ -235,11 +235,14 @@ open class MenuManager<T> {
         menu?.row = idx
     }
     
-    public init(callFirst: Bool = true, showSelectedItem: Bool = true) {
+    public init(callFirst: Bool = true, showSelectedItem: Bool = true, config: SPMenuConfig? = nil) {
         if menu == nil {
-            self.menu = SPMenu<T>(target: UIWindow.key ?? UIWindow())
+            let window = UIWindow.key ?? UIWindow()
+            self.menu = SPMenu<T>(target: window, config: config)
             self.menu?.showSelectedItem = showSelectedItem
         }
+        
+        
         
         self.callFirst = callFirst
     }

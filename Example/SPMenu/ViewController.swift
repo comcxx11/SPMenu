@@ -10,16 +10,49 @@ import UIKit
 import SPMenu
 import SnapKit
 
-struct cashList: Codable {
-    var sortNo: String?
-    var cashName: String?
-    var amounts: String?
-    var maxVal: String?
-    var minVal: String?
-    var hint: String?
+class ViewController: UIViewController {
+    
+    var menuManager: MenuManager<inboundChannels>?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        bind()
+    }
+    
+    private func bind() {
+        var config = SPMenuConfig()
+        config.bgColor = .white
+        config.rowHeight = 50
+        config.maxWidth = 200
+        menuManager = MenuManager(config: config)
+        
+        // add event
+        menuManager?.menu?.selectItem = {
+            if let data = $0 {
+                print(data)
+            }
+        }
+        
+        // add data
+        menuManager?.updateData(data: MenuDataConverter.regularAmount(value: MenuDataConverter.getDummy()))
+    }
+
+    @IBAction func ok(_ sender: UIButton) {
+        
+        // show menu
+        menuManager?.show(sender: sender)
+    }
+    
+    @IBAction func menu2(_ sender: UIButton) {
+        // show menu
+        menuManager?.show(sender: sender)
+    }
 }
 
-public struct inboundChannels: Codable {
+
+// CUSTOM DATA
+struct inboundChannels: Codable {
     var sortNo: Int?
     var downloadUrl: String?
     var text: String?
@@ -27,21 +60,7 @@ public struct inboundChannels: Codable {
     var url: String?
 }
 
-extension UIWindow {
-    static var key: UIWindow? {
-        if #available(iOS 13, *) {
-            let win = UIApplication.shared.windows.first { $0.isKeyWindow }
-            if win == nil {
-                return UIApplication.shared.windows.first
-            } else {
-                return win
-            }
-        } else {
-            return UIApplication.shared.keyWindow
-        }
-    }
-}
-
+// DUMMY DATA
 class MenuDataConverter {
     static func regularAmount(value: [inboundChannels]?) -> [SPMenuData<inboundChannels>] {
         var new: [SPMenuData<inboundChannels>] = []
@@ -51,29 +70,8 @@ class MenuDataConverter {
         
         return new
     }
-}
-
-
-class ViewController: UIViewController {
     
-    
-    var menuManager: MenuManager<inboundChannels> = MenuManager()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        menuManager.updateData(data: MenuDataConverter.regularAmount(value: getDummy()))
-        menuManager.menu?.selectItem = {
-            if let data = $0 {
-                print(data)
-            }
-        }
-    }
-
-    @IBAction func ok(_ sender: UIButton) {
-        menuManager.show(sender: sender)
-    }
-    
-    private func getDummy() -> [inboundChannels] {
+    static func getDummy() -> [inboundChannels] {
         return [inboundChannels(sortNo: 1, downloadUrl: "10,000", text: "10,000", type: 1, url: ""),
                 inboundChannels(sortNo: 2, downloadUrl: "20,000", text: "20,000", type: 1, url: ""),
                 inboundChannels(sortNo: 3, downloadUrl: "20,000", text: "30,000", type: 1, url: ""),
@@ -105,3 +103,4 @@ class ViewController: UIViewController {
       ]
     }
 }
+
