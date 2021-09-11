@@ -54,8 +54,15 @@ open class SPMenu<T>: UIView, UITableViewDataSource, UITableViewDelegate {
         
         self.init(frame: target.frame)
         self.offset = CGPoint(x: x, y: y)
-        self.config = config
-        setup()
+        
+        if let c = config {
+            self.config = c
+        } else {
+            self.config = SPMenuConfig()
+        }
+        
+        drawBackground()
+        drawMenu()
     }
     
     public override init(frame: CGRect) {
@@ -109,11 +116,6 @@ open class SPMenu<T>: UIView, UITableViewDataSource, UITableViewDelegate {
         selector?.alwaysBounceVertical = false
         
         selector?.layer.cornerRadius = 8
-    }
-    
-    private func setup() {
-        drawBackground()
-        drawMenu()
     }
     
     @objc private func tapHandler() {

@@ -27,7 +27,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="343" height="2000"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DpX-sj-VEk">
-                                                <rect key="frame" x="118" y="321" width="138" height="30"/>
+                                                <rect key="frame" x="94" y="594" width="138" height="30"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <state key="normal" title="Menu2"/>
                                                 <connections>
@@ -35,11 +35,19 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PCC-mQ-n33">
-                                                <rect key="frame" x="29" y="555" width="222" height="30"/>
+                                                <rect key="frame" x="36" y="355" width="222" height="30"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <state key="normal" title="Menu1"/>
                                                 <connections>
-                                                    <action selector="ok:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="ZIu-mu-73E"/>
+                                                    <action selector="menu1:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="dTw-8o-4Bt"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8T0-D6-9oF">
+                                                <rect key="frame" x="62" y="849" width="222" height="30"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <state key="normal" title="Menu3"/>
+                                                <connections>
+                                                    <action selector="menu3:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="fqe-Xk-YDf"/>
                                                 </connections>
                                             </button>
                                         </subviews>
