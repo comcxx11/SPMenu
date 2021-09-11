@@ -11,7 +11,7 @@ import SPMenu
 import SnapKit
 
 class ViewController: UIViewController {
-    
+    var sampleData: [SPMenuData<inboundChannels>] = MenuDataConverter.regularAmount(value: MenuDataConverter.getDummy())
     var menuManager: MenuManager<inboundChannels>?
     var menuManagerCustom: MenuManager<inboundChannels>?
     
@@ -24,7 +24,7 @@ class ViewController: UIViewController {
     }
     
     private func setupDefaultMenu() {
-        // MenuManager
+        // create menu manager
         menuManager = MenuManager()
         
         // add event
@@ -35,7 +35,7 @@ class ViewController: UIViewController {
         }
         
         // add data
-        menuManager?.updateData(data: MenuDataConverter.regularAmount(value: MenuDataConverter.getDummy()))
+        menuManager?.updateData(data: sampleData)
     }
     
     private func setupCustomMenu() {
@@ -44,7 +44,7 @@ class ViewController: UIViewController {
         config.rowHeight = 30
         config.maxWidth = 200
         
-        // MenuManager
+        // create menu manager
         menuManagerCustom = MenuManager(callFirst: false, config: config)
         
         // add event
@@ -55,7 +55,7 @@ class ViewController: UIViewController {
         }
         
         // add data
-        menuManagerCustom?.updateData(data: MenuDataConverter.regularAmount(value: MenuDataConverter.getDummy()))
+        menuManagerCustom?.updateData(data: sampleData)
     }
 
     @IBAction func menu1(_ sender: UIButton) {
