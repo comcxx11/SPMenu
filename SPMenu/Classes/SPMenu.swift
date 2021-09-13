@@ -32,7 +32,7 @@ open class SPMenu<T>: UIView, UITableViewDataSource, UITableViewDelegate {
     var offset: CGPoint?
     var items:[SPMenuData<T>]?
     
-    var row: Int = 0
+    open var row: Int = 0
     var showSelectedItem = true
     
     open var selectItem:((T?)->Void)?
@@ -178,7 +178,7 @@ open class SPMenu<T>: UIView, UITableViewDataSource, UITableViewDelegate {
 }
 
 extension UIView {
-    func clearConstraints() {
+    open func clearConstraints() {
         for subview in self.subviews {
             subview.clearConstraints()
         }

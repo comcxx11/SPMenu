@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'SPMenu'
-  s.version          = '2.0.3'
+  s.version          = '2.0.4'
   s.summary          = 'Dropdown Menu'
 
 # This description is used to generate tags and improve search results.
@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
 #   * Write the description between the DESC delimiters below.
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
-  s.description      = "SPMenu is a Dropdown Menu"
+  s.description      = "SPMenu is a Simple dropdown menu by swift."
   s.swift_version    = "5.0"
   s.homepage         = 'https://github.com/comcxx11/SPMenu'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
