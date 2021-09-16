@@ -48,7 +48,7 @@ open class SPMenu<T>: UIView, UITableViewDataSource, UITableViewDelegate {
     }
     
     public func getItem() -> T? {
-        let i = items?[row].data as? T
+        let i = items?[row].data
         return i
     }
     
