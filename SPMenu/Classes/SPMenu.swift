@@ -47,6 +47,11 @@ open class SPMenu<T>: UIView, UITableViewDataSource, UITableViewDelegate {
         return items?.count ?? 0
     }
     
+    public func getItem() -> T? {
+        let i = items?[row].data as? T
+        return i
+    }
+    
     public convenience init(target: UIView, config: SPMenuConfig? = nil) {
         let origin = target.frame.origin
         let x = origin.x
