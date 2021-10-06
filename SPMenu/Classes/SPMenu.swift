@@ -5,6 +5,7 @@ public struct SPMenuConfig {
     public var bgColor: UIColor = .white
     public var maxWidth: CGFloat = 250
     public var rowHeight = 44
+    public var font: UIFont = UIFont.systemFont(ofSize: 14)
     
     public init() {
         
@@ -148,7 +149,7 @@ open class SPMenu<T>: UIView, UITableViewDataSource, UITableViewDelegate {
         cell.layoutMargins = .zero
         cell.selectionStyle = .gray
         
-        cell.textLabel?.font = UIFont.systemFont(ofSize: 14)
+        cell.textLabel?.font = config?.font
         cell.textLabel?.textColor = .black
         
         return cell
