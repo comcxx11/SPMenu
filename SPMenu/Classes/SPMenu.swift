@@ -138,7 +138,8 @@ open class SPMenu<T>: UIView, UITableViewDataSource, UITableViewDelegate {
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SPMenuCell", for: indexPath)
+        cell.textLabel?.numberOfLines = 2
         cell.textLabel?.text = self.items?[indexPath.row].title
         
         cell.backgroundColor = .clear
