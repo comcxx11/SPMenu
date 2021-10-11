@@ -51,7 +51,7 @@ open class SPMenuFigure<T> {
     }
     
     var upHeight: CGFloat {
-        return winHeight - (winHeight - gptc.y)
+        return winHeight - (winHeight - gptc.y) - 50 // 높이 값 조절 2021.10.11
     }
     
     var w:CGFloat {

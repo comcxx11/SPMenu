@@ -1,11 +1,19 @@
 import UIKit
 import SnapKit
 
+
 public struct SPMenuConfig {
+    public enum SPMenuType {
+        case normal
+        case image
+        case fullImage
+    }
+    
     public var bgColor: UIColor = .white
     public var maxWidth: CGFloat = 250
     public var rowHeight = 44
     public var font: UIFont = UIFont.systemFont(ofSize: 14)
+    public var type: SPMenuType = .normal
     
     public init() {
         
@@ -17,12 +25,42 @@ public struct SPMenuData<T> {
         self.title = title
         self.data = data
     }
+    
+    public init(title: String?, imageName: String?,  data: T) {
+        self.title = title
+        self.imageName = imageName
+        self.data = data
+    }
+    
     public var title: String?
+    public var imageName: String?
     public var data: T
 }
 
 class SPMenuCell: UITableViewCell {
+    let fullImage = UIImageView()
+    let type = SPMenuConfig.SPMenuType.normal
     
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        contentView.addSubview(fullImage)
+        
+        fullImage.snp.makeConstraints {
+            $0.edges.equalToSuperview().inset(5)
+        }
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if type == .image {
+            self.imageView?.frame = CGRect(x: 2, y: 2, width: 42, height: 38)
+        }
+    }
 }
 
 open class SPMenu<T>: UIView, UITableViewDataSource, UITableViewDelegate {
@@ -139,18 +177,41 @@ open class SPMenu<T>: UIView, UITableViewDataSource, UITableViewDelegate {
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "SPMenuCell", for: indexPath)
-        cell.textLabel?.numberOfLines = 2
-        cell.textLabel?.text = self.items?[indexPath.row].title
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SPMenuCell", for: indexPath) as! SPMenuCell
+        
+        switch config?.type {
+        case .normal:
+            cell.fullImage.isHidden = true
+        case .image:
+            cell.fullImage.isHidden = true
+            if let imgName = self.items?[indexPath.row].imageName {
+                cell.imageView?.image = UIImage(named: imgName)
+            }
+        case .fullImage:
+            if let imgName = self.items?[indexPath.row].imageName {
+                cell.fullImage.isHidden = false
+                cell.fullImage.image = UIImage(named: imgName)
+                cell.fullImage.contentMode = .scaleAspectFit
+            }
+        default:
+            break
+        }
+        
+        switch config?.type {
+        case .normal, .image:
+            cell.textLabel?.numberOfLines = 2
+            cell.textLabel?.font = config?.font
+            cell.textLabel?.textColor = .black
+            cell.textLabel?.text = self.items?[indexPath.row].title
+        default:
+            break
+        }
         
         cell.backgroundColor = .clear
         cell.preservesSuperviewLayoutMargins = false
         cell.separatorInset = .zero
         cell.layoutMargins = .zero
         cell.selectionStyle = .gray
-        
-        cell.textLabel?.font = config?.font
-        cell.textLabel?.textColor = .black
         
         return cell
     }
@@ -250,8 +311,6 @@ open class MenuManager<T> {
             self.menu = SPMenu<T>(target: window, config: config)
             self.menu?.showSelectedItem = showSelectedItem
         }
-        
-        
         
         self.callFirst = callFirst
     }
