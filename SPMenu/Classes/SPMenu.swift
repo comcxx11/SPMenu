@@ -43,12 +43,9 @@ class SPMenuCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
         contentView.addSubview(fullImage)
         
-        fullImage.snp.makeConstraints {
-            $0.edges.equalToSuperview().inset(5)
-        }
+        fullImage.frame = CGRect(x: 0, y: 0, width: 250, height: 38)
     }
     
     required init?(coder: NSCoder) {
@@ -163,9 +160,7 @@ open class SPMenu<T>: UIView, UITableViewDataSource, UITableViewDelegate {
     }
     
     @objc private func tapHandler() {
-        self.selector?.clearConstraints()
-        self.bg.clearConstraints()
-        self.removeFromSuperview()
+        removeConstraints()
     }
     
     public required init?(coder: NSCoder) {
@@ -188,8 +183,8 @@ open class SPMenu<T>: UIView, UITableViewDataSource, UITableViewDelegate {
                 cell.imageView?.image = UIImage(named: imgName)
             }
         case .fullImage:
+            cell.fullImage.isHidden = false
             if let imgName = self.items?[indexPath.row].imageName {
-                cell.fullImage.isHidden = false
                 cell.fullImage.image = UIImage(named: imgName)
                 cell.fullImage.contentMode = .scaleAspectFit
             }
@@ -220,6 +215,10 @@ open class SPMenu<T>: UIView, UITableViewDataSource, UITableViewDelegate {
         selector?.deselectRow(at: indexPath, animated: true)
         row = indexPath.row
         selectItem?(self.items?[indexPath.row].data)
+        removeConstraints()
+    }
+    
+    private func removeConstraints() {
         selector?.clearConstraints()
         bg.clearConstraints()
         removeFromSuperview()
