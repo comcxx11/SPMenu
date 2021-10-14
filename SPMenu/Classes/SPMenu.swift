@@ -15,8 +15,8 @@ public struct SPMenuConfig {
     public var font: UIFont = UIFont.systemFont(ofSize: 14)
     public var type: SPMenuType = .normal
     
-    public init() {
-        
+    public init(type: SPMenuType = .normal) {
+        self.type = type
     }
 }
 
@@ -140,6 +140,10 @@ open class SPMenu<T>: UIView, UITableViewDataSource, UITableViewDelegate {
     
     public func callFirst() {
          self.selectItem?(self.items?.first?.data)
+    }
+    
+    public func selectItem(row: Int) {
+        self.selectItem?(self.items?[row].data)
     }
     
     private func drawMenu() {
