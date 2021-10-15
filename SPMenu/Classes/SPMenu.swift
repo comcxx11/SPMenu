@@ -175,6 +175,25 @@ open class SPMenu<T>: UIView, UITableViewDataSource, UITableViewDelegate {
         return items?.count ?? 0
     }
     
+    /// Core Graphics를 사용하는 이미지 리사이징
+    /// 원본 : CGImage,  결과 : CGImage
+    func resize(image: CGImage, scale: CGFloat, completionHandler: (CGImage?) -> Void)
+    {
+        let size = CGSize(width: CGFloat(image.width), height: CGFloat(image.height))
+        let context = CGContext( // #1
+            data: nil,
+            width: Int(size.width * scale),
+            height: Int(size.height * scale),
+            bitsPerComponent: 8,
+            bytesPerRow: 0,
+            space: CGColorSpaceCreateDeviceRGB(),
+            bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!
+        context.interpolationQuality = .high // #2
+        context.draw(image, in: CGRect(origin:.zero, size:size))
+        let resultImage = context.makeImage()
+        completionHandler(resultImage)
+    }
+    
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SPMenuCell", for: indexPath) as! SPMenuCell
         
@@ -184,7 +203,16 @@ open class SPMenu<T>: UIView, UITableViewDataSource, UITableViewDelegate {
         case .image:
             cell.fullImage.isHidden = true
             if let imgName = self.items?[indexPath.row].imageName {
-                cell.imageView?.image = UIImage(named: imgName)
+                if let img = UIImage(named: imgName)?.cgImage {
+                    resize(image: img, scale: 1, completionHandler: { resizedImage in
+                        if let ok = resizedImage {
+                            cell.imageView?.image = UIImage(cgImage: ok)
+                        }
+                        
+                    })
+                }
+                
+                
             }
         case .fullImage:
             cell.fullImage.isHidden = false
