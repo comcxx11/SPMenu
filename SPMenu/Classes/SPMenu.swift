@@ -1,6 +1,11 @@
 import UIKit
 import SnapKit
 
+extension Collection where Indices.Iterator.Element == Index {
+    subscript (exist index: Index) -> Iterator.Element? {
+        return indices.contains(index) ? self[index] : nil
+    }
+}
 
 public struct SPMenuConfig {
     public enum SPMenuType {
@@ -84,7 +89,7 @@ open class SPMenu<T>: UIView, UITableViewDataSource, UITableViewDelegate {
     }
     
     public func getItem() -> T? {
-        let i = items?[row].data
+        let i = items?[exist: row]?.data
         return i
     }
     
@@ -143,7 +148,7 @@ open class SPMenu<T>: UIView, UITableViewDataSource, UITableViewDelegate {
     }
     
     public func selectItem(row: Int) {
-        self.selectItem?(self.items?[row].data)
+        self.selectItem?(self.items?[exist: row]?.data)
     }
     
     private func drawMenu() {
