@@ -18,7 +18,7 @@ open class SPMenuFigure<T> {
     
     // up weight value : 100 ~
     // down weight value : -100 ~
-    let centerWeight:CGFloat = 100
+    let centerWeight:CGFloat = 50
     let defaultPadding:CGFloat = 80
     
     var rowHeight:Int
