@@ -93,6 +93,10 @@ open class SPMenu<T>: UIView, UITableViewDataSource, UITableViewDelegate {
         return i
     }
     
+    public func getItems() -> [SPMenuData<T>]? {
+        return self.items
+    }
+    
     public convenience init(target: UIView, config: SPMenuConfig? = nil) {
         let origin = target.frame.origin
         let x = origin.x
