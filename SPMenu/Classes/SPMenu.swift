@@ -20,8 +20,12 @@ public struct SPMenuConfig {
     public var font: UIFont = UIFont.systemFont(ofSize: 14)
     public var type: SPMenuType = .normal
     
-    public init(type: SPMenuType = .normal) {
+    public init(type: SPMenuType = .normal, font: UIFont? = nil) {
         self.type = type
+        
+        if let f = font {
+            self.font = f
+        }
     }
 }
 
